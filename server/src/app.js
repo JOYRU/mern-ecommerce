@@ -1,7 +1,11 @@
 const express = require('express') ;
 const bodyParser = require('body-parser')
-const createError = require('http-errors')
+const createError = require('http-errors');
+const userRouter = require('./routers/userRouter');
 const app = express() ; 
+
+
+app.use('/api/users',userRouter) ;
 
 
 // app.use(morgan('dev')) ;
@@ -11,11 +15,6 @@ app.get('/',(req,res)=>{
     });
 });
 
-app.get('/api/users',(req,res)=>{
-    res.status(200).send({
-        message: 'User Profile is returned'
-    });
-});
 
 //client side error handling
 app.use((req,res,next)=>{
