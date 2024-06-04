@@ -1,16 +1,10 @@
-const express = require('express') ;
-const app = express() ; 
+
+const app = require('./app') ;
+const {serverPort} = require('./secret') ; 
 
 
-// app.use(morgan('dev')) ;
 
-app.get('./test',(req,res)=>{
-    res.status(200).send({
-        message: 'api testing is working'
-    });
-});
-
-app.listen(3001 , ()=>{
-    console.log('server is running a at ') ; 
+app.listen(serverPort , ()=>{
+    console.log('server is running a at localhost   ' + {serverPort}  ) ; 
     
 }) ; 
