@@ -2,10 +2,12 @@ const express = require('express') ;
 const bodyParser = require('body-parser')
 const createError = require('http-errors');
 const userRouter = require('./routers/userRouter');
+const { seedRouter } = require('./routers/seedRouter');
 const app = express() ; 
 
 
 app.use('/api/users',userRouter) ;
+app.use('/api/seed',seedRouter)
 
 
 // app.use(morgan('dev')) ;
