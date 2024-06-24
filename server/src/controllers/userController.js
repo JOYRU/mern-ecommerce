@@ -66,4 +66,24 @@ const getUsers =async(req,res)=>{
 
 };
 
-module.exports = {getUsers}
+const getUser = async(req,res,next)=>{
+    try{
+
+        const id = req.params.id ; 
+        const options = {password: 0} ; 
+        const user = await User.findById(id,options) ; 
+        
+        if(!user) throw createError(404,'Users does not exist' ) ; 
+
+        return successResponse(res,{
+            statusCode: 200 , 
+            message:'user were returned successfully',
+            payload:{user}
+        }) ; 
+
+    }catch(error){
+       next(error) ;
+    }
+}
+
+module.exports = {getUsers,getUser}

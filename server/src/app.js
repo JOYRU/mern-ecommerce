@@ -8,7 +8,7 @@ const app = express() ;
 
 
 app.use('/api/users',userRouter) ;
-app.use('/api/seed',seedRouter)
+app.use('/api/seed',seedRouter) ; 
 
 
 // app.use(morgan('dev')) ;
