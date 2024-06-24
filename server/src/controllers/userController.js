@@ -1,5 +1,6 @@
 const createError = require('http-errors') ;
 const User = require("../models/userModel");
+const { successResponse } = require('./responseController');
 
 
 const getUsers =async(req,res)=>{
@@ -23,22 +24,43 @@ const getUsers =async(req,res)=>{
         const count = await User.find(filter).countDocuments() ; 
 
         if(!users) throw createError(404,'no users found' )
-        res.status(200).send({
-            message: 'User were returned sucessfully' ,
-            users,
-            pagination:{
-                totalPages: Math.ceil(count/limit),
-                currentPage:page,
-                previousPage: page - 1 > 0 ? page-1: null,
-                nextPage: page + 1<=Math.ceil(count/limit) ? page+1:null  ,
-                 
+        // res.status(200).send({
+        //     message: 'User were returned sucessfully' ,
+        // payload:{
+        //             users,
+        //             pagination:{
+        //                 totalPages: Math.ceil(count/limit),
+        //                 currentPage:page,
+        //                 previousPage: page - 1 > 0 ? page-1: null,
+        //                 nextPage: page + 1<=Math.ceil(count/limit) ? page+1:null  ,
+                         
+        
+        //             }
+        
+        //         }
+
+        // });
+      
+        return successResponse(res,{
+            statusCode : 200 , 
+            message: 'User was returned successfully' , 
+            payload:{
+                users,
+                pagination:{
+                    totalPages: Math.ceil(count/limit),
+                    currentPage:page,
+                    previousPage: page - 1 > 0 ? page-1: null,
+                    nextPage: page + 1<=Math.ceil(count/limit) ? page+1:null  ,
+                     
+    
+                },
+    
 
             }
+        })
 
-
-        });
     }catch(error){
-        next(error) ;
+         next(error) ;
     }
    
 

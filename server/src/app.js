@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const createError = require('http-errors');
 const userRouter = require('./routers/userRouter');
 const { seedRouter } = require('./routers/seedRouter');
+const { errorResponse } = require('./controllers/responseController');
 const app = express() ; 
 
 
@@ -31,6 +32,10 @@ app.use((err,req,res,next)=>{
         message:err.message , 
 
     }) ; 
+    return errorResponse(res,{
+        statusCode : err.status,
+        message:err.message
+    });
 
 })  ; 
 
