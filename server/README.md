@@ -18,4 +18,9 @@ app.use(express.urlencoded({extended: true}))
  #need to read about mongoose schema validator 
  #install npm i bcrypt for password encoded and decoded; 
  ## keep image path  in .env folder check tutorial 14 last 3 min
+##create seed route for testing
+##get /appi/users/ ->isAdmin->getAllUsers->searchByName + pagination functionality
+##response controller 
+## find users depend on id 
+## how to services in the backend
 
