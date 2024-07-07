@@ -3,6 +3,7 @@ const fs = require('fs') ;
 
 const User = require("../models/userModel");
 const { successResponse } = require('./responseController');
+const { findWithId } = require('../services/findItem');
 
 
 const getUsers =async(req,res)=>{
@@ -73,7 +74,10 @@ const getUser = async(req,res,next)=>{
 
         const id = req.params.id ; 
         const options = {password: 0} ; 
-        const user = await User.findById(id,options) ; 
+        //const user = await User.findById(id,options) ; 
+        
+        const user = await findWithId(User,id,options) ; 
+
         
         if(!user) throw createError(404,'Users does not exist' ) ; 
 
