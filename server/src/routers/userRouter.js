@@ -7,7 +7,7 @@ const userRouter = express.Router() ;
 userRouter.get('/', getUsers);
 
 userRouter.get('/:id', getUser);
-userRouter.get('/:id', deleteUser);
+userRouter.delete('/:id', deleteUser);
 
 
 module.exports = userRouter ; 

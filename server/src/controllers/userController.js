@@ -96,7 +96,7 @@ const deleteUser = async(req,res,next)=>{
         const user = await User.findById(id,options) ; 
         console.log(user) ;
         
-        const deleteUser = await User.findByIdAndDelete({id })
+        const deleteUser = await User.findByIdAndDelete({_id:id }) ; 
         
         const userImagePath = user.image ; 
         fs.access(userImagePath  , (err)=>{
