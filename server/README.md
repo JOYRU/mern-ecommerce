@@ -23,4 +23,6 @@ app.use(express.urlencoded({extended: true}))
 ##response controller 
 ## find users depend on id 
 ## how to services in the backend
+##create an user -- register process
+##try to avoid duplicate email
 

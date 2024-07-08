@@ -1,4 +1,6 @@
 const createError = require('http-errors') ;
+const bodyParser = require('body-parser') ;
+
 const fs = require('fs') ; 
 
 const User = require("../models/userModel");
@@ -128,4 +130,46 @@ const deleteUser = async(req,res,next)=>{
     }
 }
 
-module.exports = {getUsers,getUser,deleteUser}
+const processRegister = async(req , res , next)=>{
+    try{
+        const {name, email, password, phone, address} = req.body ; 
+
+        const userExists = await User.findOne({email}) ; 
+        // if(userExists){
+        //     throw createError(409,'User was already exist.Plase try with another mail') ; 
+        // }
+        // console.log(userExists)
+
+    //   const userExist =   User.findOne({
+    //         $or: [{
+    //             email: email
+    //         }, {
+    //             name: name
+    //         }]
+    //     }) ; 
+
+        console.log(userExists.email) ;
+        console.log(userExists.name) ; 
+
+
+        const newUser = {
+            name,
+            email,
+            password,
+            phone,
+            address
+        } ; 
+
+        return successResponse(res,{
+            statusCode: 200 , 
+            message:"user register success",
+            payload:{newUser}
+        })
+
+    }catch(error){
+        next(error) ; 
+    }
+}
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister}
