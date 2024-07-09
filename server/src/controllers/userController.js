@@ -6,6 +6,8 @@ const fs = require('fs') ;
 const User = require("../models/userModel");
 const { successResponse } = require('./responseController');
 const { findWithId } = require('../services/findItem');
+const { jwtActivationKey } = require('../secret');
+const { createJSONWebToken } = require('../helper/jsonwebtoken');
 
 
 const getUsers =async(req,res)=>{
@@ -134,7 +136,7 @@ const processRegister = async(req , res , next)=>{
     try{
         const {name, email, password, phone, address} = req.body ; 
 
-        const userExists = await User.findOne({email}) ; 
+        const userExists = await User.findOne({email:email}) ; 
         // if(userExists){
         //     throw createError(409,'User was already exist.Plase try with another mail') ; 
         // }
@@ -148,9 +150,14 @@ const processRegister = async(req , res , next)=>{
     //         }]
     //     }) ; 
 
-        console.log(userExists.email) ;
-        console.log(userExists.name) ; 
+        // console.log(userExists.email) ;
+        // console.log(userExists.name) ; 
+//create jwt
 
+
+      const token =   createJSONWebToken({name, email, password, phone, address},jwtActivationKey,'10m') ; 
+      
+      console.log(token) ; 
 
         const newUser = {
             name,
@@ -163,7 +170,7 @@ const processRegister = async(req , res , next)=>{
         return successResponse(res,{
             statusCode: 200 , 
             message:"user register success",
-            payload:{newUser}
+            payload:{token},
         })
 
     }catch(error){
