@@ -8,6 +8,8 @@ const { successResponse } = require('./responseController');
 const { findWithId } = require('../services/findItem');
 const { jwtActivationKey } = require('../secret');
 const { createJSONWebToken } = require('../helper/jsonwebtoken');
+const { Http2ServerRequest } = require('http2');
+const { Script } = require('vm');
 
 
 const getUsers =async(req,res)=>{
@@ -158,6 +160,23 @@ const processRegister = async(req , res , next)=>{
       const token =   createJSONWebToken({name, email, password, phone, address},jwtActivationKey,'10m') ; 
       
       console.log(token) ; 
+
+      //PREPARE EMAIL
+        const emailData = {
+            email,
+            subject: 'Account Activation Email',
+            html:
+            Script
+            <h2>
+                Hello ${name}
+            </h2>
+            <p>
+
+            </p>
+        }
+
+      //SEND email with nodemailer
+
 
         const newUser = {
             name,
