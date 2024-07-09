@@ -25,4 +25,5 @@ app.use(express.urlencoded({extended: true}))
 ## how to services in the backend
 ##create an user -- register process
 ##try to avoid duplicate email
+## create json webtoken
 
