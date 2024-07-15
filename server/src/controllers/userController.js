@@ -1,5 +1,6 @@
 const createError = require('http-errors') ;
 const bodyParser = require('body-parser') ;
+var nodemailer = require('nodemailer');
 
 const fs = require('fs') ; 
 
@@ -158,21 +159,45 @@ const processRegister = async(req , res , next)=>{
 
 
       const token =   createJSONWebToken({name, email, password, phone, address},jwtActivationKey,'10m') ; 
-      
-      console.log(token) ; 
+
+    
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'joycseru@gmail.com',
+    pass: 'nuzzalbesjcwrvxw'
+  }
+});
+
+var mailOptions = {
+  from: 'joycseru@gmail.com',
+  to: 'bpbs.itdept@gmail.com',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: sucessfully ' + info.response);
+  }
+});
+   
 
       //PREPARE EMAIL
         const emailData = {
-            email,
-            subject: 'Account Activation Email',
-            html:
-            Script
-            <h2>
-                Hello ${name}
-            </h2>
-            <p>
+            // email,
+            // subject: 'Account Activation Email',
+            // html:
+            // Script
+            // <h2>
+            //     Hello ${name}
+            // </h2>
+            // <p>
 
-            </p>
+            // </p>
         }
 
       //SEND email with nodemailer
