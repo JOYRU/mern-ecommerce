@@ -1,6 +1,14 @@
+const express = require('express')
 const createError = require('http-errors') ;
+const jwt = require('jsonwebtoken') ; 
+
 const bodyParser = require('body-parser') ;
 var nodemailer = require('nodemailer');
+
+const app = express() ; 
+
+
+app.use(bodyParser.json());
 
 const fs = require('fs') ; 
 
@@ -162,29 +170,29 @@ const processRegister = async(req , res , next)=>{
 
     
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'joycseru@gmail.com',
-    pass: 'nuzzalbesjcwrvxw'
-  }
-});
+        var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'joycseru@gmail.com',
+            pass: 'nuzzalbesjcwrvxw'
+        }
+        });
 
-var mailOptions = {
-  from: 'joycseru@gmail.com',
-  to: 'bpbs.itdept@gmail.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
+        var mailOptions = {
+        from: 'joycseru@gmail.com',
+        to: 'bpbs.itdept@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+        };
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: sucessfully ' + info.response);
-  }
-});
-   
+        transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: sucessfully ' + info.response);
+        }
+        });
+        
 
       //PREPARE EMAIL
         const emailData = {
@@ -222,5 +230,25 @@ transporter.sendMail(mailOptions, function(error, info){
     }
 }
 
+const activateUserAccount = async(req , res , next)=>{
+  try{
 
-module.exports = {getUsers,getUser,deleteUser,processRegister}
+    const token = req.body.token; 
+
+    console.log(token) ;
+    if(!token) throw createError(404,'token not found') ; 
+   
+    const decode =  jwt.verify(token,jwtActivationKey) ; 
+    console.log(decode) ; 
+    return successResponse(res,{
+        statusCode:201,
+        message: 'User was registered Successfully'
+    })
+  }catch(error){
+    next(error) ; 
+}
+
+} ; 
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount}

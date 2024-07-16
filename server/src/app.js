@@ -7,6 +7,11 @@ const { errorResponse } = require('./controllers/responseController');
 const app = express() ; 
 app.use(express.json()) ; 
 
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 app.use('/api/users',userRouter) ;
 app.use('/api/seed',seedRouter) ; 
 
