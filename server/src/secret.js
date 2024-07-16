@@ -1,6 +1,8 @@
 require('dotenv').config() ; 
 const serverPort = process.env.SERVER_PORT ; 
 module.exports = {serverPort}
+const defaultImagePath = process.env.DEFAULT_USER_IMAGE_PATH || 'public/images/users/default.png'
+
 
 const jwtActivationKey = process.env.JWT_ACTIVATION_KEY || 'ahahihaighaigag_28y2266283' ; 
 
