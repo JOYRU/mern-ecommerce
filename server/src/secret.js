@@ -9,5 +9,8 @@ const jwtActivationKey = process.env.JWT_ACTIVATION_KEY || 'ahahihaighaigag_28y2
 const smtpUsername = process.env.SMTP_USERNAME || '' ; 
 const smtpPassword = process.env.SMTP_PASSWORD || '' ; 
 
+const uploadDir = process.env.UPLOAD_FILE || 'public/images/users' ; 
 
-module.exports = {jwtActivationKey , smtpUsername ,smtpPassword }
+
+
+module.exports = {jwtActivationKey , smtpUsername ,smtpPassword , uploadDir }
