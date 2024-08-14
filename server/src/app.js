@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const userRouter = require('./routers/userRouter');
 const { seedRouter } = require('./routers/seedRouter');
 const { errorResponse } = require('./controllers/responseController');
+const { productRouter } = require('./routers/productRouter');
 const app = express() ; 
 app.use(express.json()) ; 
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json())
 
 app.use('/api/users',userRouter) ;
 app.use('/api/seed',seedRouter) ; 
+app.use('/api/product',productRouter) ; 
 
 
 // app.use(morgan('dev')) ;
