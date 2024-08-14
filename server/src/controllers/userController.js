@@ -145,7 +145,7 @@ const deleteUser = async(req,res,next)=>{
 
 const processRegister = async(req , res , next)=>{
     try{
-        const {name, email, password, phone, address} = req.body ; 
+        const {name, email, password, phone, address,image} = req.body ; 
 
         const userExists = await User.findOne({email:email}) ; 
         // if(userExists){
@@ -214,10 +214,16 @@ const processRegister = async(req , res , next)=>{
         const newUser = {
             name,
             email,
+            image,
             password,
             phone,
             address
         } ; 
+
+        const users = await User.insertMany(newUser) ; 
+        console.log(users) ;
+
+
 
         return successResponse(res,{
             statusCode: 200 , 
@@ -238,11 +244,14 @@ const activateUserAccount = async(req , res , next)=>{
     console.log(token) ;
     if(!token) throw createError(404,'token not found') ; 
    
-    const decode =  jwt.verify(token,jwtActivationKey) ; 
+    const decode =  jwt.verify(token,jwtActivationKey) ;
+    const users = await User.insertMany(decode) ; 
     console.log(decode) ; 
     return successResponse(res,{
         statusCode:201,
-        message: 'User was registered Successfully'
+        message: 'User was registered Successfully',
+        users
+
     })
   }catch(error){
     next(error) ; 
