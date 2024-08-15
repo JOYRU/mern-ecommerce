@@ -215,13 +215,13 @@ const processRegister = async(req , res , next)=>{
             name,
             email,
             image,
-            password,
-            phone,
-            address
+             password,
+              phone,
+              address
         } ; 
 
-        const users = await User.insertMany(newUser) ; 
-        console.log(users) ;
+        // const users = await User.insertMany(newUser) ; 
+        // console.log(users) ;
 
 
 
