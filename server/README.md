@@ -26,4 +26,7 @@ app.use(express.urlencoded({extended: true}))
 ##create an user -- register process
 ##try to avoid duplicate email
 ## create json webtoken
+## for image use npm i multer path 
+## npm i express-validator
+
 

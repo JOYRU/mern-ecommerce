@@ -148,10 +148,10 @@ const processRegister = async(req , res , next)=>{
         const {name, email, password, phone, address,image} = req.body ; 
 
         const userExists = await User.findOne({email:email}) ; 
-        // if(userExists){
-        //     throw createError(409,'User was already exist.Plase try with another mail') ; 
-        // }
-        // console.log(userExists)
+        if(userExists){
+            throw createError(409,'User was already Exist.Plase try with another mail') ; 
+        }
+       
 
     //   const userExist =   User.findOne({
     //         $or: [{
@@ -249,7 +249,7 @@ const activateUserAccount = async(req , res , next)=>{
     console.log(decode) ; 
     return successResponse(res,{
         statusCode:201,
-        message: 'User was registered Successfully',
+        message: 'User registered Successfully Done',
         users
 
     })
