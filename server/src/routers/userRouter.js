@@ -6,7 +6,7 @@ const  runValidation  = require('../validators');
 
 const userRouter = express.Router() ; 
 
-userRouter.post('/process-register',validateUserRegistration,runValidation, upload.single("image") ,processRegister);
+userRouter.post('/process-register',validateUserRegistration,runValidation ,upload.single("image"),processRegister);
 userRouter.post('/verify',activateUserAccount);
 userRouter.get('/', getUsers);
 

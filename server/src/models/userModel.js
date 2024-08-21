@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt') ;
 const userSchema = new Schema({
     name: {
         type:String,
-        required:[true,'User name is missing'],
+        // required:[true,'User name is missing'],
         trim:true,
         maxlength:[31, 'user name can be max 31 cha'],
 
@@ -25,9 +25,11 @@ const userSchema = new Schema({
         set:(v) => bcrypt.hashSync(v,bcrypt.genSaltSync(10)) ,
     },
     image: {
-        type:String ,
-        default: 'public/images/users/default.png'
-        
+        // type:String ,
+        // default: 'public/images/users/default.png'
+        type: Buffer,
+        contentType: String,
+        required:[true,'Image requireed'] ,
     },
     address:{
         type:String,

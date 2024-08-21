@@ -1,11 +1,11 @@
 const {validationResult} = require('express-validator');
 const { errorResponse } = require("../controllers/responseController");
 
-const runValidation = (req,res,next)=>{
+const runValidation = async(req,res,next)=>{
     try{
 
         const errors = validationResult(req) ;
-        console.log(req.body.name) ;
+       // console.log(req.body.name) ;
         if(!errors.isEmpty()) {
            return errorResponse(res,{
             statusCode:422 , 

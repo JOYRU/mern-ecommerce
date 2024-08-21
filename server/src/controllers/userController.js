@@ -170,28 +170,28 @@ const processRegister = async(req , res , next)=>{
 
     
 
-        var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'joycseru@gmail.com',
-            pass: 'nuzzalbesjcwrvxw'
-        }
-        });
+        // var transporter = nodemailer.createTransport({
+        // service: 'gmail',
+        // auth: {
+        //     user: 'joycseru@gmail.com',
+        //     pass: 'nuzzalbesjcwrvxw'
+        // }
+        // });
 
-        var mailOptions = {
-        from: 'joycseru@gmail.com',
-        to: 'bpbs.itdept@gmail.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-        };
+        // var mailOptions = {
+        // from: 'joycseru@gmail.com',
+        // to: 'bpbs.itdept@gmail.com',
+        // subject: 'Sending Email using Node.js',
+        // text: 'That was easy!'
+        // };
 
-        transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: sucessfully ' + info.response);
-        }
-        });
+        // transporter.sendMail(mailOptions, function(error, info){
+        // if (error) {
+        //     console.log(error);
+        // } else {
+        //     console.log('Email sent: sucessfully ' + info.response);
+        // }
+        // });
         
 
       //PREPARE EMAIL
