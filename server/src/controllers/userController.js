@@ -291,6 +291,7 @@ const updateUserBySingleId = async(req,res,next)=>{
         updates.name = req.body.password ; 
 
       }
+      console.log(updates) ;
 
       const image = req.file ; 
       if(image){
@@ -301,8 +302,10 @@ const updateUserBySingleId = async(req,res,next)=>{
       }
 
       updates.image = image.buffer.toString('base64') ; 
+      
 
       const updatedUser = await User.findByIdAndUpdate(userId,updates,updateOptions) ; 
+      console.log(updatedUser) ;
       if(!updatedUser){
         throw createError(404,'User with this id does not exit ')
       }
