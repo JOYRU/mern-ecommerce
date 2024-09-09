@@ -145,8 +145,23 @@ const deleteUser = async(req,res,next)=>{
 
 const processRegister = async(req , res , next)=>{
     try{
-        const {name, email, password, phone, address,image} = req.body ; 
+        const {name, email, password, phone, address} = req.body ; 
+         
+        const image = req.file ; 
 
+        if(!image){
+            throw createError(400,'Image FIle is required') ; 
+
+        }
+
+        if(image.size > 1024*1024*2){
+            throw createError(400,'File too large.It must be less then 2 mb') ; 
+        }
+
+        console.log(image); 
+
+        const imageBufferString = req.file.buffer.toString('base64') ; 
+   
         const userExists = await User.findOne({email:email}) ; 
         if(userExists){
             throw createError(409,'User was already Exist.Plase try with another mail') ; 
@@ -166,7 +181,7 @@ const processRegister = async(req , res , next)=>{
 //create jwt
 
 
-      const token =   createJSONWebToken({name, email, password, phone, address},jwtActivationKey,'10m') ; 
+      const token =   createJSONWebToken({name, email, password, phone, address, image:imageBufferString},jwtActivationKey,'10m') ; 
 
     
 
@@ -259,5 +274,52 @@ const activateUserAccount = async(req , res , next)=>{
 
 } ; 
 
+const updateUserBySingleId = async(req,res,next)=>{
+    try{
 
-module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount}
+        const userId = req.params.id ; 
+        const updateOptions = {new:true , context:'query'} ; 
+
+        let updates = {} ; 
+
+        //name , email, password , phone , image ,address,
+      if(req.body.name){
+        updates.name = req.body.name ; 
+
+      }
+      if(req.body.password){
+        updates.name = req.body.password ; 
+
+      }
+
+      const image = req.file ; 
+      if(image){
+        if(image.size > 1024*1024*2){
+            throw createError(400,'File too large.It must be less then 2 mb') ; 
+        }
+
+      }
+
+      updates.image = image.buffer.toString('base64') ; 
+
+      const updatedUser = await User.findByIdAndUpdate(userId,updates,updateOptions) ; 
+      if(!updatedUser){
+        throw createError(404,'User with this id does not exit ')
+      }
+        return successResponse(res,{
+            statusCode: 200 , 
+            message:'user was Updated successfully',
+            payload:updatedUser,
+            
+        }) ; 
+
+    }catch(error){
+       next(error) ;
+    }
+}
+
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId
+
+}

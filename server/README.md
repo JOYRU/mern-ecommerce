@@ -28,5 +28,7 @@ app.use(express.urlencoded({extended: true}))
 ## create json webtoken
 ## for image use npm i multer path 
 ## npm i express-validator
+## store image as String or Buffer
+## /api/users/:id update a single user by id
 
 
