@@ -29,6 +29,11 @@ app.use(express.urlencoded({extended: true}))
 ## for image use npm i multer path 
 ## npm i express-validator
 ## store image as String or Buffer
-## /api/users/:id update a single user by id
+## /api/users/:id update a single user by 
+//api/auth/login 
+//bcryptjs install 
+//api/auth/logout
+//isLogIn,isLogOut,isAdmin
+//cookieParser
 
 

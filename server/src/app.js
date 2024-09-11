@@ -1,10 +1,12 @@
 const express = require('express') ;
+const cookieParser = require('cookie-parser') ;
 const bodyParser = require('body-parser')
 const createError = require('http-errors');
 const userRouter = require('./routers/userRouter');
 const { seedRouter } = require('./routers/seedRouter');
 const { errorResponse } = require('./controllers/responseController');
 const { productRouter } = require('./routers/productRouter');
+const authRouter = require('./routers/authRouter');
 const app = express() ; 
 app.use(express.json()) ; 
 
@@ -12,10 +14,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+app.use(cookieParser()) ;
 
 app.use('/api/users',userRouter) ;
 app.use('/api/seed',seedRouter) ; 
-app.use('/api/product',productRouter) ; 
+app.use('/api/auth',authRouter) ; 
 
 
 // app.use(morgan('dev')) ;
