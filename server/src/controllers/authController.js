@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken') ;
 const { successResponse } = require("./responseController");
 const User = require("../models/userModel");
 const { jwtActivationKey } = require("../secret");
+const { cookie } = require("express-validator");
 
 User
 
@@ -63,5 +64,22 @@ const handleLogin = async(req,res,next)=>{
     }
 };
 
+const handleLogOut = async(req,res,next)=>{
+    try{
+        
+        res.clearCookie('access_token') ; 
 
-module.exports = {handleLogin}
+        return successResponse(res, {
+            statusCode:200,
+            message:'user logout Successfully',
+            payload:{}
+,         }) ; 
+
+    }
+    catch(error){
+       next(error) ; 
+    }
+};
+
+
+module.exports = {handleLogin,handleLogOut}
