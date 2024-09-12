@@ -7,7 +7,7 @@ const { successResponse } = require('../controllers/responseController');
 const isLoggedIn =async (req,res,next)=>{
      try{
         const token = req.cookies.access_token ; 
-        console.log(token);
+        //console.log(token);
 
         if(!token){
             throw createError(401,'Access token not found') ; 
@@ -19,6 +19,8 @@ const isLoggedIn =async (req,res,next)=>{
             throw createError(401,'Access token is not valid') ; 
 
         }
+       // console.log(decoded) ;
+        req.body.userId = decoded._id ; 
         //need to check
          next() ; 
      

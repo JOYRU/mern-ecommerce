@@ -39,7 +39,7 @@ const handleLogin = async(req,res,next)=>{
        }
        //token , cookie
        //create jwt 
-       const accessToken = createJSONWebToken({email},
+       const accessToken = createJSONWebToken({_id:user._id},
         jwtActivationKey,
         '10m'
        );

@@ -9,7 +9,7 @@ const userRouter = express.Router() ;
 
 userRouter.post('/process-register',validateUserRegistration,upload.single("image"),processRegister);
 userRouter.post('/verify',activateUserAccount);
-userRouter.get('/',getUsers);
+userRouter.get('/',isLoggedIn,getUsers);
 
 //userRouter.get('/:id',isLoggedIn,getUser);
 userRouter.get('/:id',isLoggedIn,getUser);
