@@ -39,9 +39,9 @@ const handleLogin = async(req,res,next)=>{
        }
        //token , cookie
        //create jwt 
-       const accessToken = createJSONWebToken({_id:user._id},
+       const accessToken = createJSONWebToken({isAdmin:user.isAdmin},
         jwtActivationKey,
-        '10m'
+        '15m'
        );
 
        res.cookie('access_token',accessToken,{
@@ -80,6 +80,21 @@ const handleLogOut = async(req,res,next)=>{
        next(error) ; 
     }
 };
+const isAdmin = async(req,res,next)=>{
+    try{
+        
+        res.clearCookie('access_token') ; 
 
+        return successResponse(res, {
+            statusCode:200,
+            message:'user logout Successfully',
+            payload:{}
+,         }) ; 
 
-module.exports = {handleLogin,handleLogOut}
+    }
+    catch(error){
+       next(error) ; 
+    }
+};
+
+module.exports = {handleLogin,handleLogOut }

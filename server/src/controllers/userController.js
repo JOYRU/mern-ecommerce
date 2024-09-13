@@ -19,6 +19,7 @@ const { jwtActivationKey } = require('../secret');
 const { createJSONWebToken } = require('../helper/jsonwebtoken');
 const { Http2ServerRequest } = require('http2');
 const { Script } = require('vm');
+const { handleUserAction } = require('../services/userservices');
 
 
 const getUsers =async(req,res)=>{
@@ -322,8 +323,48 @@ const updateUserBySingleId = async(req,res,next)=>{
     }
 }
 
+const updateUserStatusById = async(req,res,next)=> {
+      try{
+        const userId = req.params.id ; 
+        const action = req.body.action ; 
 
+    //      let update  ; 
+    //      let successMessage ; 
+    //      if(action=='ban'){
+    //         update = {isBanned: true} ; 
+    //         successMessage = "User was Banned Successfully"
+    //      }else if(action=='unban'){
+    //          update = {isBanned:false}
+    //           successMessage = "User was UnBanned Successfully"
+    //      }else{
+    //         throw createError(400,'Invalid Action. Use Ban or unban') ; 
+    //      }
+   
+    //     ///const updates = {isBanned:true}  ; 
+    //     const updateOptions = {new: true , runValidators : true , context: 'query'} ; 
+    //     const updatedUser =  await User.findByIdAndUpdate(
+    //         userId,
+    //         update,
+    //         updateOptions
+    //     ).select('-password') ; 
 
-module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId
+    // if(!updatedUser){
+    //     throw createError(400,'Ban/Unban is not sucessfully work') ; 
+    // }
 
+    const successMessage = await handleUserAction(userId,action) ; 
+    console.log(successMessage);
+
+    return successResponse(res,{
+          statusCode:200,
+          message:successMessage
+    }) ; 
+
+      }catch(error){
+        next(error) ; 
+      }
 }
+
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById}
