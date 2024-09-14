@@ -2,6 +2,8 @@ const express = require('express')
 const createError = require('http-errors') ;
 const jwt = require('jsonwebtoken') ; 
 
+const bcrypt = require('bcryptjs') ; 
+
 const bodyParser = require('body-parser') ;
 var nodemailer = require('nodemailer');
 
@@ -18,8 +20,8 @@ const { findWithId } = require('../services/findItem');
 const { jwtActivationKey } = require('../secret');
 const { createJSONWebToken } = require('../helper/jsonwebtoken');
 const { Http2ServerRequest } = require('http2');
-const { Script } = require('vm');
-const { handleUserAction } = require('../services/userservices');
+const { Script} = require('vm');
+const { handleUserAction,findUsers } = require('../services/userservices');
 
 
 const getUsers =async(req,res)=>{
@@ -27,54 +29,36 @@ const getUsers =async(req,res)=>{
         const search = req.query.search || "" ; 
         const page = Number(req.query.page) || 1 ; 
         const limit = Number(req.query.limit) || 1 ; 
-        const searchRegExp = new RegExp('.*' + search + ".*",'i') ; 
-        const filter = {
-            isAdmin : {$ne : true },
-            $or:[
-                {name:{$regex:searchRegExp}},
-                {email:{$regex:searchRegExp}},
-                {phone:{$regex:searchRegExp}},
+        //these line of code hide.Becasuse of i do these work by using services.
+
+        // const searchRegExp = new RegExp('.*' + search + ".*",'i') ; 
+        // const filter = {
+        //     isAdmin : {$ne : true },
+        //     $or:[
+        //         {name:{$regex:searchRegExp}},
+        //         {email:{$regex:searchRegExp}},
+        //         {phone:{$regex:searchRegExp}},
                 
-            ]
-        } ; 
-        const options = {password : 0 } ; 
+        //     ]
+        // } ; 
+        // const options = {password : 0 } ; 
 
-        const users = await User.find(filter,options).limit(limit).skip((page-1)*limit) ;
-        const count = await User.find(filter).countDocuments() ; 
+        // const users = await User.find(filter,options).limit(limit).skip((page-1)*limit) ;
+        // const count = await User.find(filter).countDocuments() ; 
 
-        if(!users) throw createError(404,'no users found' )
-        // res.status(200).send({
-        //     message: 'User were returned sucessfully' ,
-        // payload:{
-        //             users,
-        //             pagination:{
-        //                 totalPages: Math.ceil(count/limit),
-        //                 currentPage:page,
-        //                 previousPage: page - 1 > 0 ? page-1: null,
-        //                 nextPage: page + 1<=Math.ceil(count/limit) ? page+1:null  ,
-                         
-        
-        //             }
-        
-        //         }
+        // if(!users) throw createError(404,'no users found' ) ; 
 
-        // });
+      const {users,pagination} = await findUsers(search,page,limit) ; 
+
+
+       
       
         return successResponse(res,{
             statusCode : 200 , 
             message: 'User was returned successfully' , 
             payload:{
                 users,
-                pagination:{
-                    totalPages: Math.ceil(count/limit),
-                    currentPage:page,
-                    previousPage: page - 1 > 0 ? page-1: null,
-                    nextPage: page + 1<=Math.ceil(count/limit) ? page+1:null  ,
-                     
-    
-                },
-    
-
+                pagination:pagination,
             }
         })
 
@@ -365,6 +349,56 @@ const updateUserStatusById = async(req,res,next)=> {
       }
 }
 
+const handleUpdatePassword =async (req,res,next)=>{
+    try{
+      const {email,oldPassword, newPassword,confirmPassword} = req.body ; 
+      const userId = req.params.id ; 
+
+      const user =await User.findById(userId) ; 
+      if(!user){
+        throw createError(400,'User not exist') ; 
+      
+      }
+    
+      //console.log(user) ;
+      console.log(user.password ) ;
+
+       const isPasswordMatch =await  bcrypt.compare(oldPassword,user.password) ; 
+      if(!isPasswordMatch){
+     
+          throw createError(401,'OldPassword did not match.Please provide valid password') ; 
+
+      }
+
+      console.log(isPasswordMatch) ; 
+
+      const fileter = {userId} ; 
+      const update = {$set:{password:newPassword}} ;
+      const updateOptions = {new:true} ; 
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        update,
+        updateOptions
+      ).select('-password') ; 
+  
 
 
-module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById}
+
+
+
+       
+        return successResponse(res,{
+             statusCode:200 ,
+             message:"User Password Updated Successfully",
+             payload:{updatedUser},
+        }) ; 
+
+    }catch(error){
+        next(error) ; 
+    }
+
+}
+
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById,handleUpdatePassword}
