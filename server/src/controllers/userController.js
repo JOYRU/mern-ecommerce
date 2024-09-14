@@ -171,34 +171,34 @@ const processRegister = async(req , res , next)=>{
 
     
 
-        // var transporter = nodemailer.createTransport({
-        // service: 'gmail',
-        // auth: {
-        //     user: 'joycseru@gmail.com',
-        //     pass: 'nuzzalbesjcwrvxw'
-        // }
-        // });
+        var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'joycseru@gmail.com',
+            pass: 'nuzzalbesjcwrvxw'
+        }
+        });
 
-        // var mailOptions = {
-        // from: 'joycseru@gmail.com',
-        // to: 'bpbs.itdept@gmail.com',
-        // subject: 'Sending Email using Node.js',
-        // text: 'That was easy!'
-        // };
+        var mailOptions = {
+        from: 'joycseru@gmail.com',
+        to: 'bpbs.itdept@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+        };
 
-        // transporter.sendMail(mailOptions, function(error, info){
-        // if (error) {
-        //     console.log(error);
-        // } else {
-        //     console.log('Email sent: sucessfully ' + info.response);
-        // }
-        // });
+        transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: sucessfully ' + info.response);
+        }
+        });
         
 
       //PREPARE EMAIL
         const emailData = {
             // email,
-            // subject: 'Account Activation Email',
+            subject: 'Account Activation Email',
             // html:
             // Script
             // <h2>
@@ -361,7 +361,7 @@ const handleUpdatePassword =async (req,res,next)=>{
       }
     
       //console.log(user) ;
-      console.log(user.password ) ;
+      //console.log(user.password ) ;
 
        const isPasswordMatch =await  bcrypt.compare(oldPassword,user.password) ; 
       if(!isPasswordMatch){
@@ -370,7 +370,7 @@ const handleUpdatePassword =async (req,res,next)=>{
 
       }
 
-      console.log(isPasswordMatch) ; 
+      //console.log(isPasswordMatch) ; 
 
       const fileter = {userId} ; 
       const update = {$set:{password:newPassword}} ;
@@ -381,12 +381,6 @@ const handleUpdatePassword =async (req,res,next)=>{
         updateOptions
       ).select('-password') ; 
   
-
-
-
-
-
-       
         return successResponse(res,{
              statusCode:200 ,
              message:"User Password Updated Successfully",
@@ -400,5 +394,72 @@ const handleUpdatePassword =async (req,res,next)=>{
 }
 
 
+const handleForgetPassword =async (req,res,next)=>{
+    try{
+      const {email} = req.body ; 
+      const userId = req.params.id ; 
+      console.log(email) ;
 
-module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById,handleUpdatePassword}
+     /// const userData =await User.findOne({email:email}) ; 
+     // got error find userData with email
+      const userData =await User.findById(userId) ; 
+      console.log(userData) ; 
+      if(!userData){
+        throw createError(404,'Email is not correct.Please provide correct mail') ;    
+      }
+      const token =   createJSONWebToken({ email},jwtActivationKey,'10m') ; 
+
+    
+
+      var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+          user: 'joycseru@gmail.com',
+          pass: 'nuzzalbesjcwrvxw'
+      }
+      });
+
+      var mailOptions = {
+      from: 'joycseru@gmail.com',
+      to: 'bpbs.itdept@gmail.com',
+      subject: 'Sending Email using Node.js',
+      text: 'That was easy!'
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Email sent: sucessfully ' + info.response);
+      }
+      });
+      
+
+    //PREPARE EMAIL
+      const emailData = {
+          // email,
+          subject: 'Account Activation Email',
+          // html:
+          // Script
+          // <h2>
+          //     Hello ${name}
+          // </h2>
+          // <p>
+
+          // </p>
+      }
+
+        return successResponse(res,{
+             statusCode:200 ,
+             message:"Forget password",
+             payload:{token},
+        }) ; 
+
+    }catch(error){
+        next(error) ; 
+    }
+
+}
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById,handleUpdatePassword,handleForgetPassword}
