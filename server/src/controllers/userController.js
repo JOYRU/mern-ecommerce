@@ -461,5 +461,38 @@ const handleForgetPassword =async (req,res,next)=>{
 
 }
 
+const handleResetPassword = async(req,res,next)=>{
+    try{
+        const {token , password} = req.body ; 
+        const decoded = jwt.verify(token,jwtActivationKey) ; 
+        if(!decoded){
+            throw createError(400,'Invalid/Expire Token') ; 
+        
+        }
 
-module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById,handleUpdatePassword,handleForgetPassword}
+        const filter = {email:decoded.email} ; 
+        const update = {password:password} ; 
+        const options = {new:true} ; 
+        const updateUser = await User.findOneAndUpdate(
+            filter,
+            update,
+            options
+        ).select('-password') ; 
+        if(!updateUser){
+            throw createError(400,'Password reset is not successful') ; 
+        }
+        return successResponse(res,{
+                statusCode:200,
+                message:"User Password reset successfully"
+
+            });
+
+    }catch(error){
+      next(error) ; 
+    }
+}
+
+
+
+
+module.exports = {getUsers,getUser,deleteUser,processRegister,activateUserAccount,updateUserBySingleId ,updateUserStatusById,handleUpdatePassword,handleForgetPassword,handleResetPassword}
