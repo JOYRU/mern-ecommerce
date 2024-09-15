@@ -18,7 +18,8 @@ userRouter.put('/:id',upload.single("image") ,updateUserBySingleId);
 userRouter.put('/user-status/:id',updateUserStatusById);
 userRouter.put('/update-password/:id',handleUpdatePassword);
 userRouter.post('/forget-password/:id',handleForgetPassword);
-userRouter.post('/reset-password',handleResetPassword);
+userRouter.put('/reset-password',isLoggedIn,handleResetPassword);
+
 
 
 module.exports = userRouter ; 

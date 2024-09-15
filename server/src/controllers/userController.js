@@ -426,13 +426,13 @@ const handleForgetPassword =async (req,res,next)=>{
       text: 'That was easy!'
       };
 
-      transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-          console.log(error);
-      } else {
-          console.log('Email sent: sucessfully ' + info.response);
-      }
-      });
+    //   transporter.sendMail(mailOptions, function(error, info){
+    //   if (error) {
+    //       console.log(error);
+    //   } else {
+    //       console.log('Email sent: sucessfully ' + info.response);
+    //   }
+    //   });
       
 
     //PREPARE EMAIL
@@ -463,8 +463,13 @@ const handleForgetPassword =async (req,res,next)=>{
 
 const handleResetPassword = async(req,res,next)=>{
     try{
+       /// console.log("hello");
         const {token , password} = req.body ; 
+       /// console.log("hello");
         const decoded = jwt.verify(token,jwtActivationKey) ; 
+       ///console.log(decoded);
+        //console.log("hello");
+        
         if(!decoded){
             throw createError(400,'Invalid/Expire Token') ; 
         
