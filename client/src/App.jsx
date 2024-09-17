@@ -1,13 +1,16 @@
 import { useState } from 'react'
+import Index from './routes'
 
 
 function App() {
   
 
   return (
-    <>
-      <div>Hello World</div>
-    </>
+   <div>
+        <Index />
+   </div>
+    
+   
   )
 }
 
